@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123f35">
+  <title>Ledgerhouse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="authScreen" class="auth-screen">
+    <div class="auth-copy"><div class="logo">LEDGER<span>HOUSE</span></div><p class="kicker">Private financial operations</p><h1>Every movement,<br><em>accounted for.</em></h1><p>Manage balances, send funds, and seed accounts from one focused workspace.</p></div>
+    <section class="auth-card"><div class="auth-switch"><button class="switch active" data-mode="login">Log in</button><button class="switch" data-mode="register">Register</button></div><p class="kicker">Your workspace</p><h2 id="authHeading">Welcome back</h2><p id="authHint" class="muted">Enter your credentials to continue.</p><form id="authForm"><label id="nameWrap" class="field hidden">Name<input id="name" autocomplete="name"></label><label class="field">Email<input id="email" type="email" required autocomplete="email"></label><label class="field">Password<input id="password" type="password" required minlength="6" autocomplete="current-password"></label><button class="button primary" type="submit"><span id="authSubmit">Open dashboard</span> <b>↗</b></button><p id="authMessage" class="message"></p></form></section>
+  </main>
+  <main id="appScreen" class="app-screen hidden">
+    <aside class="sidebar"><div class="logo">LEDGER<span>HOUSE</span></div><div class="side-user"><div id="avatar" class="avatar">U</div><div><strong id="userName">User</strong><small id="userEmail">email</small></div></div><nav><button class="nav-link active" data-view="overview">◈ <span>Overview</span></button><button class="nav-link" data-view="accounts">▣ <span>Accounts</span></button><button class="nav-link" data-view="history">≋ <span>History</span></button><button class="nav-link" data-view="transfer">↗ <span>Send funds</span></button><button id="fundsNav" class="nav-link hidden" data-view="funds">＋ <span>Initial funds</span></button></nav><button id="logout" class="logout">↪ Log out</button></aside>
+    <section class="content"><header class="mobile-head"><div class="logo">LEDGER<span>HOUSE</span></div><button id="mobileLogout" class="logout">Log out</button></header><div class="topline"><div><p class="kicker">Operations dashboard</p><h1 id="viewTitle">Overview</h1></div><button id="refresh" class="button light">↻ Refresh</button></div><div id="notice" class="notice"></div>
+      <section id="overview" class="view active-view"><div class="stats"><article class="stat primary-stat"><small>Total balance</small><strong id="totalBalance">₹0</strong><span>Across your active accounts</span></article><article class="stat"><small>Accounts</small><strong id="accountCount">0</strong><span>Available to operate</span></article><article class="stat"><small>Last movement</small><strong id="lastAmount">—</strong><span id="lastStatus">No activity yet</span></article></div><div class="grid two"><article class="panel"><div class="panel-head"><div><p class="kicker">Your money</p><h2>Account snapshot</h2></div><button class="text-button" data-go="accounts">View all →</button></div><div id="overviewAccounts" class="list"></div></article><article class="panel"><div class="panel-head"><div><p class="kicker">Recent movement</p><h2>Activity</h2></div></div><div id="activity" class="list"><p class="muted">Transactions completed in this session will appear here.</p></div></article></div></section>
+      <section id="accounts" class="view"><article class="panel"><div class="panel-head"><div><p class="kicker">Account management</p><h2>All accounts</h2></div><button id="createAccount" class="button primary">+ New account</button></div><div id="accountsList" class="list"></div></article></section>
+      <section id="history" class="view"><article class="panel"><div class="panel-head"><div><p class="kicker">Audit trail</p><h2>Transaction history</h2></div><button id="historyRefresh" class="button light">↻ Refresh</button></div><div id="historyList" class="history-list"><p class="muted">Loading transaction history...</p></div></article></section>
+      <section id="transfer" class="view"><article class="panel form-panel"><p class="kicker">Normal transfer</p><h2>Send funds</h2><p class="muted">Move money from one of your active accounts to another ledger account.</p><form id="transferForm" class="form-grid"><label class="field">From account<select id="fromAccount" required><option value="">Select source account</option></select></label><label class="field">Destination account<input id="toAccount" required placeholder="Account ID"></label><label class="field">Amount (INR)<input id="transferAmount" type="number" min="0.01" step="0.01" required placeholder="0.00"></label><div><button class="button primary" type="submit">Send securely <b>↗</b></button><p id="transferMessage" class="message"></p></div></form></article></section>
+      <section id="funds" class="view"><article class="panel form-panel warm"><p class="kicker">System operation</p><h2>Add initial funds</h2><p class="muted">Seed a user's active account from the system account. A success email is sent to the recipient.</p><form id="fundsForm" class="form-grid"><label class="field">Destination account<input id="fundsAccount" required placeholder="Account ID"></label><label class="field">Amount (INR)<input id="fundsAmount" type="number" min="0.01" step="0.01" required placeholder="0.00"></label><div><button class="button warm-button" type="submit">Add initial funds <b>↗</b></button><p id="fundsMessage" class="message"></p></div></form></article></section>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
