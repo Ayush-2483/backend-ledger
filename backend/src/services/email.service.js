@@ -13,13 +13,15 @@ const transporter = nodemailer.createTransport({
 });
 
 // Verify the connection configuration
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('Error connecting to email server:', error);
-  } else {
-    console.log('Email server is ready to send messages');
-  }
-});
+transporter.verify()
+  .then(() => {
+    console.log("Email server is ready to send messages");
+  })
+  .catch((error) => {
+    console.error("Email verification failed");
+    console.error("Code:", error.code);
+    console.error("Message:", error.message);
+  });
 
 
 
@@ -27,17 +29,27 @@ transporter.verify((error, success) => {
 const sendEmail = async (to, subject, text, html) => {
   try {
     const info = await transporter.sendMail({
-      from: `"Backend Ledger" <${process.env.EMAIL_USER}>`, // sender address
-      to, // list of receivers
-      subject, // Subject line
-      text, // plain text body
-      html, // html body
+      from: `"Backend Ledger" <${process.env.EMAIL_USER}>`,
+      to,
+      subject,
+      text,
+      html,
     });
 
-    console.log('Message sent: %s', info.messageId);
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    console.log("EMAIL SENT");
+    console.log("Message ID:", info.messageId);
+    console.log("Accepted:", info.accepted);
+    console.log("Rejected:", info.rejected);
+
+    return info;
+
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("EMAIL SEND ERROR");
+    console.error("Code:", error.code);
+    console.error("Response:", error.response);
+    console.error("Message:", error.message);
+
+    throw error; // VERY IMPORTANT
   }
 };
 
