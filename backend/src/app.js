@@ -8,7 +8,12 @@ const app = express(); // server ka instance
 
 app.use(express.json());  //express server req.body ke andr ke data ko nahi padh skta 
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '..', '..', 'frontend')));
+app.use(express.static(path.join(__dirname, '../../frontend')));
+
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../frontend/index.html'));
+});
 
 /*
 * - Routes Requires
