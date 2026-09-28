@@ -1,117 +1,377 @@
-# Backend Ledger
+# 💰 Backend Ledger
 
-Backend Ledger is a secure account and transaction management system built with Node.js, Express, MongoDB, JWT authentication, MongoDB transactions, token blacklisting, TTL cleanup, and email notifications.
+> A secure account and transaction management system built with **Node.js, Express.js, MongoDB, JWT authentication, and MongoDB transactions**.
 
-The project supports user registration, login, logout, account creation, balance tracking, initial funds, money transfers, transaction history, idempotency protection, and transaction email notifications.
+<p align="center">
 
-## Overview
+[🚀 **Live Demo**](https://backend-ledger-j8p4.onrender.com/)
 
-Backend Ledger maintains a double-entry style ledger system.
+</p>
 
-Every transaction creates:
+---
 
-- One debit ledger entry from the source account
-- One credit ledger entry to the destination account
-- One transaction record with status tracking
-- A unique idempotency key to prevent duplicate deductions
+## 🚀 Live Demo
 
-The system supports two types of users:
+### 👉 [TRY BACKEND LEDGER LIVE](https://backend-ledger-j8p4.onrender.com/)
 
-- Normal users
-- System users
+**Demo credentials**
 
-System users can add initial funds to another user's account. Normal users can transfer money only from their own accounts.
+```text
+Email: YOUR_DEMO_EMAIL
+Password: YOUR_DEMO_PASSWORD
+```
 
-## Features
+> ⚠️ The live demo uses a separate database/environment. Please do not use real financial information.
+
+---
+
+## 📌 Overview
+
+**Backend Ledger** is a secure account and transaction management system designed around a **double-entry style ledger architecture**.
+
+The system supports:
+
+* User registration and authentication
+* Account creation and balance management
+* Money transfers between accounts
+* System-user initial funds
+* Transaction history
+* MongoDB atomic transactions
+* Idempotency protection
+* Token blacklisting
+* MongoDB TTL cleanup
+* Email notifications
+* Responsive frontend dashboard
+
+### 🔄 Transaction Flow
+
+```text
+                    User
+                     │
+                     ▼
+              Authentication
+                     │
+                     ▼
+               API Request
+                     │
+                     ▼
+              Auth Middleware
+                     │
+                     ▼
+          Transaction Controller
+                     │
+                     ▼
+          MongoDB Session/Transaction
+                ┌────┴────┐
+                ▼         ▼
+          Debit Entry  Credit Entry
+                │         │
+                └────┬────┘
+                     ▼
+             Transaction Record
+                     │
+                     ▼
+              Email Notification
+```
+
+---
+
+# ✨ Features
+
+## 🔐 Authentication
+
+* User registration
+* User login with JWT
+* Password hashing using `bcryptjs`
+* Cookie-based authentication
+* Bearer token authentication
+* Protected routes
+* System-user authorization
+* Logout API
+* JWT token blacklisting
+* Automatic blacklist cleanup using MongoDB TTL
+
+---
+
+## 🏦 Account Management
+
+* Create a new account
+* Get all accounts belonging to the logged-in user
+* Get account balance
+* Account status management
+* Active / Frozen / Closed states
+* INR currency support
+* Account ownership validation
+
+---
+
+## 💸 Transactions
+
+### Normal Transfers
+
+Users can transfer money between their own and other eligible accounts.
+
+Each transfer creates:
+
+```text
+Sender Account
+      │
+      │ DEBIT
+      ▼
+Ledger Entry
+      │
+      │
+      ▼
+Transaction Record
+      │
+      │
+      ▼
+Ledger Entry
+      │ CREDIT
+      ▼
+Receiver Account
+```
+
+### Transaction Safety
+
+The system includes:
+
+* MongoDB session-based transactions
+* Atomic balance updates
+* Debit and credit ledger entries
+* Transaction status tracking
+* Idempotency keys
+* Duplicate transaction prevention
+* Concurrent request protection
+* Sender ownership validation
+* Destination account validation
+* Active account validation
+* Positive amount validation
+
+### Transaction States
+
+```text
+PENDING
+   │
+   ├──► COMPLETED
+   │
+   ├──► FAILED
+   │
+   └──► REVERSED
+```
+
+---
+
+## 💰 System-User Initial Funds
+
+System users can add initial funds to another user's account.
+
+```text
+System User
+     │
+     │ Initial Funds
+     ▼
+Destination Account
+     │
+     ├── Balance Updated
+     ├── Ledger Entry Created
+     └── Email Notification
+```
+
+Normal users cannot access this functionality.
+
+---
+
+# 📧 Email Notifications
+
+The system integrates **Nodemailer + Gmail OAuth2** for transactional emails.
+
+Supported notifications include:
+
+* Registration email
+* Successful transaction email to sender
+* Successful transaction email to receiver
+* Initial funds email
+* Failed transaction email support
+
+```text
+Transaction
+     │
+     ▼
+Transaction Successful
+     │
+     ▼
+Email Service
+     │
+     ├──► Sender
+     │
+     └──► Receiver
+```
+
+---
+
+# 🖥️ Frontend Dashboard
+
+The project also includes a responsive frontend dashboard.
+
+### Dashboard Features
+
+* Login
+* Registration
+* Account overview
+* Account list
+* Account balances
+* Transaction history
+* Send funds
+* System-user initial funds
+* Admin-only functionality
+* Automatic balance refresh
+* Logout
+* Responsive desktop/mobile UI
+
+---
+
+# 🛠️ Tech Stack
+
+## Backend
+
+| Technology    | Purpose                   |
+| ------------- | ------------------------- |
+| Node.js       | JavaScript runtime        |
+| Express.js    | REST API framework        |
+| MongoDB       | Database                  |
+| Mongoose      | MongoDB ODM               |
+| JWT           | Authentication            |
+| bcryptjs      | Password hashing          |
+| Nodemailer    | Email notifications       |
+| cookie-parser | Cookie handling           |
+| dotenv        | Environment configuration |
+
+## Frontend
+
+| Technology | Purpose           |
+| ---------- | ----------------- |
+| HTML       | Structure         |
+| CSS        | Styling           |
+| JavaScript | Application logic |
+| Fetch API  | API communication |
+
+## Services
+
+* MongoDB Atlas
+* Gmail OAuth2
+* Nodemon
+
+---
+
+# 🏗️ Architecture
+
+```text
+Frontend
+   │
+   │ HTTP / Fetch API
+   ▼
+Express.js API
+   │
+   ├── Routes
+   │
+   ├── Middleware
+   │      └── Authentication / Authorization
+   │
+   ├── Controllers
+   │
+   ├── Services
+   │      └── Email Service
+   │
+   └── Models
+          │
+          ▼
+      MongoDB
+```
+
+---
+
+# 🔒 Security
+
+Security was considered throughout the application.
 
 ### Authentication
 
-- User registration
-- User login with JWT
-- Password hashing using bcryptjs
-- Cookie-based authentication
-- Bearer token authentication
-- Protected routes
-- System-user authorization
-- Logout API
-- Token blacklist after logout
-- Automatic blacklist cleanup with MongoDB TTL
+```text
+Password
+   │
+   ▼
+bcryptjs
+   │
+   ▼
+Hashed Password
+   │
+   ▼
+MongoDB
+```
 
-### Account Management
+### JWT Authentication
 
-- Create a new account
-- Get all accounts of the logged-in user
-- Get account balance
-- Account status management
-- Active, frozen, and closed account states
-- INR currency support
+```text
+Login
+  │
+  ▼
+JWT Generated
+  │
+  ▼
+Cookie / Authorization Header
+  │
+  ▼
+Auth Middleware
+  │
+  ▼
+Protected Route
+```
 
-### Transactions
+### Logout
 
-- Normal account-to-account transfers
-- System-user initial funds
-- Debit and credit ledger entries
-- MongoDB session-based transactions
-- Transaction status tracking
-- Completed, pending, failed, and reversed states
-- Duplicate transaction prevention with idempotency keys
-- Protection against concurrent duplicate requests
-- Sender account ownership validation
-- Active account validation
-- Positive amount validation
+```text
+Logout
+  │
+  ▼
+JWT Added To Blacklist
+  │
+  ▼
+MongoDB TTL
+  │
+  ▼
+Automatic Cleanup
+```
 
-### Email Notifications
+---
 
-- Registration email
-- Successful transaction email to the sender
-- Successful transaction email to the receiver
-- Initial funds email to the destination account owner
-- Failed transaction email service support
-- Gmail OAuth2 email integration using Nodemailer
+# 🧠 Important Backend Concepts Implemented
 
-### Frontend Dashboard
+This project demonstrates practical backend concepts including:
 
-- Login and registration interface
-- Overview dashboard
-- Account list
-- Account balances
-- Transaction history
-- Send funds screen
-- System-user initial funds screen
-- Admin-only initial funds option
-- Automatic dashboard balance refresh
-- Logout support
-- Responsive layout for desktop and mobile
+* REST API design
+* Authentication & authorization
+* JWT
+* Password hashing
+* HTTP cookies
+* Middleware
+* MongoDB transactions
+* Mongoose sessions
+* Atomic database operations
+* Double-entry style ledger design
+* Idempotency
+* Concurrent request protection
+* Database indexing
+* MongoDB TTL indexes
+* Transaction state management
+* Email service integration
+* Environment variables
+* Error handling
+* Role-based authorization
 
-## Tech Stack
+---
 
-### Backend
-
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- JSON Web Token
-- bcryptjs
-- Nodemailer
-- cookie-parser
-- dotenv
-
-### Frontend
-
-- HTML
-- CSS
-- Vanilla JavaScript
-- Fetch API
-- Responsive CSS layout
-
-### Services
-
-- MongoDB Atlas
-- Gmail OAuth2
-- Nodemon for development
-
-## Folder Structure
+# 📂 Folder Structure
 
 ```text
 BACKEND-LEDGER/
@@ -158,3 +418,97 @@ BACKEND-LEDGER/
 │   └── style.css
 │
 └── .gitignore
+```
+
+---
+
+# ⚙️ Local Setup
+
+### 1. Clone the repository
+
+```bash
+git clone YOUR_GITHUB_REPO_URL
+cd BACKEND-LEDGER
+```
+
+### 2. Install backend dependencies
+
+```bash
+cd backend
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a `.env` file:
+
+```env
+PORT=3000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+
+EMAIL_USER=your_email
+GOOGLE_CLIENT_ID=your_client_id
+GOOGLE_CLIENT_SECRET=your_client_secret
+GOOGLE_REFRESH_TOKEN=your_refresh_token
+```
+
+### 4. Start the backend
+
+```bash
+npm run dev
+```
+
+### 5. Open the frontend
+
+Open:
+
+```text
+frontend/index.html
+```
+
+---
+
+# 🧪 API Testing
+
+API endpoints can be tested using:
+
+* Postman
+* Thunder Client
+* Browser
+* Frontend dashboard
+
+Example:
+
+```http
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/logout
+
+POST /api/accounts
+GET  /api/accounts
+GET  /api/accounts/:id
+
+POST /api/transactions
+GET  /api/transactions
+```
+
+---
+
+# 🎯 What This Project Demonstrates
+
+> **Backend Ledger was built to demonstrate production-oriented backend concepts rather than just basic CRUD operations.**
+
+The project focuses on:
+
+**Security → Consistency → Atomicity → Idempotency → Authorization → Reliability**
+
+---
+
+## 👨‍💻 Author
+
+**Ayush Chaurasiya**
+
+Backend / MERN Stack Developer
+
+[GitHub](https://github.com/Ayush-2483) • [LinkedIn](https://www.linkedin.com/in/ayush2483)
